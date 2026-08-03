@@ -13,19 +13,6 @@ An intelligent resume screening system that uses Natural Language Processing (NL
 - 🖥️ **Interactive Dashboard** - Streamlit frontend with bulk upload, search, and analytics
 - 🔄 **Async Processing** - Background task queue for large volumes
 
-## 🏗️ Architecture
-┌─────────────────────────────────────────────────────────────┐
-│ Streamlit Frontend (Port 8501)                              │
-├─────────────────────────────────────────────────────────────┤
-│ FastAPI Backend (Port 8000)                                 │
-│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐          │
-│ │ Upload       │ │ Extract      │ │ Match        │          │
-│ │ Resume       │→│ spaCy NER    │→│ FAISS        │          │
-│ └──────────────┘ └──────────────┘ └──────────────┘          │
-├─────────────────────────────────────────────────────────────┤
-│ SQLite + FAISS + File System                                │
-└─────────────────────────────────────────────────────────────┘
-
 
 ## 🚀 Quick Start
 
@@ -37,7 +24,7 @@ An intelligent resume screening system that uses Natural Language Processing (NL
 
 ```bash
 # Clone repository
-git clone <your-repo-url>
+git clone https://github.com/DrLeroK/resume_screening_system.git
 cd resume_screening_system
 
 # Create virtual environment
@@ -94,13 +81,13 @@ curl -X POST "http://localhost:8000/matches/for-job/{job_id}?top_k=10"
 
 
 # 🛠️ Tech Stack
-Category	Technology
-Backend	FastAPI, Python 3.12
-NLP	spaCy, Sentence-Transformers
-ML	PyTorch, Transformers, FAISS
-Database	SQLite, SQLAlchemy
-Frontend	Streamlit, Plotly
-Async	asyncio, BackgroundTasks
+Category	   Technology
+Backend	       FastAPI, Python 3.12
+NLP	           spaCy, Sentence-Transformers
+ML	           PyTorch, Transformers, FAISS
+Database	   SQLite, SQLAlchemy
+Frontend	   Streamlit, Plotly
+Async	       asyncio, BackgroundTasks
 
 
 # Project Structure
