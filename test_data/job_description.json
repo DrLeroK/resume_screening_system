@@ -1,0 +1,12 @@
+{
+  "title": "Senior Python Backend Engineer",
+  "company": "TechInnovate Inc.",
+  "description": "We are looking for a Senior Python Backend Engineer to join our growing team. You will design and build scalable APIs, work with cloud technologies, and mentor junior developers.\n\nResponsibilities:\n- Design and implement RESTful APIs using FastAPI or Django\n- Optimize database queries and caching strategies\n- Deploy and manage services on AWS\n- Collaborate with frontend teams and product managers\n- Mentor junior engineers and conduct code reviews\n\nRequirements:\n- 5+ years of Python development experience\n- Strong experience with FastAPI or Django\n- Proficiency with PostgreSQL or similar databases\n- Experience with Docker and Kubernetes\n- AWS cloud experience (EC2, S3, Lambda)\n- Strong communication and leadership skills\n\nNice to have:\n- Experience with microservices architecture\n- Knowledge of Redis and caching\n- CI/CD pipeline experience",
+  "required_skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS"],
+  "preferred_skills": ["Kubernetes", "Redis", "Microservices", "CI/CD"],
+  "min_experience_years": 5,
+  "max_experience_years": null,
+  "education_requirement": "bachelors",
+  "location": "Remote",
+  "employment_type": "full-time"
+}

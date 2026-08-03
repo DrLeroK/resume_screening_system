@@ -1,0 +1,34 @@
+Michael Chen
+Email: michael.chen@email.com | Phone: (555) 345-6789 | Location: New York, NY
+
+SUMMARY
+Data Scientist with 5 years experience in machine learning and analytics.
+
+TECHNICAL SKILLS
+• ML: Python, TensorFlow, PyTorch, scikit-learn
+• Data: SQL, Pandas, NumPy, Spark
+• Visualization: Tableau, Matplotlib, Seaborn
+• Cloud: AWS SageMaker, Google Colab
+
+WORK EXPERIENCE
+
+Data Scientist | AI Analytics | New York, NY
+Jan 2020 - Present
+- Built recommendation systems serving 1M+ users
+- Improved model accuracy by 25% through feature engineering
+- Created dashboards for business stakeholders
+
+Junior Data Scientist | DataLab | Boston, MA
+Jul 2018 - Dec 2019
+- Cleaned and analyzed large datasets
+- Built predictive models for customer churn
+
+EDUCATION
+Master of Science in Data Science
+Columbia University, 2018
+
+Bachelor of Science in Statistics
+UCLA, 2016
+
+CERTIFICATIONS
+• TensorFlow Developer Certificate

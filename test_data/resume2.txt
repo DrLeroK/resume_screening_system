@@ -1,0 +1,36 @@
+Jane Smith
+Email: jane.smith@email.com | Phone: (555) 987-6543 | Location: Austin, TX
+
+SUMMARY
+Full-stack developer with 4 years of Python experience. Strong background in web applications and database design.
+
+TECHNICAL SKILLS
+• Languages: Python, JavaScript, SQL
+• Frameworks: Django, Flask, React
+• Databases: PostgreSQL, MySQL
+• Tools: Git, Docker, AWS (basic)
+
+WORK EXPERIENCE
+
+Python Developer | WebSolutions Inc. | Austin, TX
+Mar 2021 - Present
+- Developed backend APIs using Django REST framework
+- Built database models and optimized queries for 50k+ users
+- Integrated third-party services (Stripe, SendGrid)
+- Wrote unit tests achieving 85% coverage
+
+Junior Developer | StartUpHub | Austin, TX
+Jun 2019 - Feb 2021
+- Assisted in developing Flask applications
+- Fixed bugs and improved documentation
+- Participated in Agile ceremonies
+
+EDUCATION
+Bachelor of Science in Computer Science
+University of Texas at Austin, 2019
+
+CERTIFICATIONS
+• Python Institute PCEP
+
+LANGUAGES
+English (Native)

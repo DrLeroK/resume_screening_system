@@ -1,0 +1,48 @@
+Michael Chen
+michael.chen@email.com
+(555) 345-6789
+New York, NY
+
+PROFESSIONAL SUMMARY
+Data Scientist with 5 years experience in machine learning and data analytics. Expertise in Python, SQL, and cloud-based ML solutions.
+
+TECHNICAL SKILLS
+• ML & AI: Python, TensorFlow, PyTorch, scikit-learn, XGBoost
+• Data Processing: SQL, Pandas, NumPy, Spark, Dask
+• Visualization: Tableau, Matplotlib, Seaborn, Plotly
+• Cloud: AWS SageMaker, Google Cloud AI Platform
+• Big Data: Hadoop, Hive, Kafka
+
+WORK EXPERIENCE
+
+Data Scientist | AI Analytics | New York, NY
+February 2020 - Present
+- Built recommendation systems serving 1M+ users (improved CTR by 25%)
+- Developed fraud detection models reducing false positives by 40%
+- Created dashboards for business stakeholders using Tableau
+- Led A/B testing framework implementation
+
+Junior Data Scientist | DataLab | Boston, MA
+July 2019 - January 2020
+- Cleaned and analyzed large datasets (10GB+) using Pandas
+- Built predictive models for customer churn (85% accuracy)
+- Automated data pipeline using Python and Airflow
+
+Data Analyst | MarketResearch | Boston, MA
+June 2018 - June 2019
+- Analyzed market trends using SQL and Excel
+- Created reports and presentations for clients
+
+EDUCATION
+Master of Science in Data Science
+Columbia University, 2018
+
+Bachelor of Science in Statistics
+University of California, Los Angeles, 2016
+
+CERTIFICATIONS
+• TensorFlow Developer Certificate
+• AWS Certified Machine Learning - Specialty
+
+LANGUAGES
+English (Native), Mandarin (Professional)

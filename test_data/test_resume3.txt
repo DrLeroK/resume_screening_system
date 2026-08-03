@@ -1,0 +1,38 @@
+Sarah Wilson
+sarah.wilson@email.com
+(555) 234-5678
+Seattle, WA
+
+PROFESSIONAL SUMMARY
+DevOps Engineer with 6 years experience in cloud infrastructure and automation. Expert in AWS, Kubernetes, and CI/CD pipelines.
+
+TECHNICAL SKILLS
+• Cloud: AWS (VPC, EC2, S3, RDS, Lambda, EKS), Azure, GCP
+• Infrastructure as Code: Terraform, CloudFormation, Pulumi
+• CI/CD: Jenkins, GitLab CI, GitHub Actions, ArgoCD
+• Containers: Docker, Kubernetes, Helm, Istio
+• Monitoring: Prometheus, Grafana, Datadog, ELK Stack
+
+WORK EXPERIENCE
+
+Senior DevOps Engineer | CloudNative Inc. | Seattle, WA
+March 2019 - Present
+- Built and managed Kubernetes clusters across multiple cloud providers
+- Reduced deployment time by 70% through GitOps with ArgoCD
+- Implemented infrastructure as code with Terraform (300+ resources)
+- Set up monitoring and alerting for 50+ microservices
+
+DevOps Engineer | DataCenter Corp | Seattle, WA
+June 2018 - February 2019
+- Managed AWS infrastructure for 50+ services using CloudFormation
+- Implemented centralized logging with ELK stack
+- Automated backup and disaster recovery procedures
+
+EDUCATION
+Bachelor of Science in Information Technology
+University of Washington, 2016
+
+CERTIFICATIONS
+• AWS Certified DevOps Engineer - Professional
+• Certified Kubernetes Administrator (CKA)
+• HashiCorp Certified: Terraform Associate

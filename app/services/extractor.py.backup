@@ -1,0 +1,428 @@
+"""
+Information Extractor - Fixed Version
+"""
+
+import re
+import asyncio
+from typing import List, Dict, Any, Optional
+from loguru import logger
+import spacy
+
+from ..config import settings
+from ..models.enums import SkillType, EducationLevel
+
+class InformationExtractor:
+    """Extract structured information from resume text"""
+    
+    TECHNICAL_SKILLS = {
+        'python', 'java', 'javascript', 'typescript', 'c++', 'c#', 'go', 'rust',
+        'react', 'angular', 'vue', 'node.js', 'django', 'flask', 'spring',
+        'aws', 'azure', 'gcp', 'docker', 'kubernetes', 'terraform',
+        'sql', 'postgresql', 'mongodb', 'redis', 'elasticsearch',
+        'tensorflow', 'pytorch', 'scikit-learn', 'pandas', 'numpy',
+        'git', 'jenkins', 'github actions', 'ci/cd', 'fastapi',
+        'rest api', 'graphql', 'grpc', 'microservices'
+    }
+    
+    SOFT_SKILLS = {
+        'leadership', 'communication', 'teamwork', 'problem solving',
+        'critical thinking', 'time management', 'adaptability', 'creativity',
+        'collaboration', 'project management', 'agile', 'scrum'
+    }
+    
+    def __init__(self):
+        self.nlp = None
+        self._load_model()
+        
+    def _load_model(self):
+        """Load spaCy model"""
+        try:
+            self.nlp = spacy.load(settings.ner_model)
+            logger.info(f"Loaded spaCy model: {settings.ner_model}")
+        except OSError:
+            try:
+                logger.warning(f"Could not load {settings.ner_model}, trying fallback...")
+                self.nlp = spacy.load(settings.ner_model_fallback)
+                logger.info(f"Loaded fallback model: {settings.ner_model_fallback}")
+            except:
+                logger.warning("Could not load any spaCy model, running in regex-only mode")
+                self.nlp = None
+        except Exception as e:
+            logger.error(f"Failed to load spaCy model: {str(e)}")
+            self.nlp = None
+    
+    async def extract(self, text: str) -> Dict[str, Any]:
+        """Extract all information from resume text"""
+        
+        # Validate input
+        if not text or not isinstance(text, str):
+            logger.error("Invalid text input for extraction")
+            return self._get_empty_result()
+        
+        if len(text.strip()) < 50:
+            logger.warning(f"Text too short: {len(text)} characters")
+            return self._get_empty_result()
+        
+        try:
+            # Try spaCy extraction if available
+            if self.nlp:
+                try:
+                    # Process with spaCy
+                    doc = await self._process_text(text)
+                    if doc is not None:
+                        return await self._extract_with_spacy(doc, text)
+                except Exception as e:
+                    logger.error(f"SpaCy extraction failed: {str(e)}")
+            
+            # Fallback to regex-only extraction
+            logger.info("Using regex-only extraction fallback")
+            return await self._extract_with_regex(text)
+            
+        except Exception as e:
+            logger.error(f"Extraction failed completely: {str(e)}")
+            return self._get_empty_result()
+    
+    async def _process_text(self, text: str):
+        """Process text with spaCy in thread pool"""
+        def process():
+            try:
+                if not text or len(text.strip()) == 0:
+                    return None
+                # Truncate long texts
+                if len(text) > 100000:
+                    text = text[:100000]
+                return self.nlp(text)
+            except Exception as e:
+                logger.error(f"SpaCy processing error: {str(e)}")
+                return None
+        
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, process)
+    
+    async def _extract_with_spacy(self, doc, text: str) -> Dict[str, Any]:
+        """Extract using spaCy"""
+        skills = await self._extract_skills_with_dict(text)
+        education = await self._extract_education_with_regex(text)
+        experience = await self._extract_experience_with_regex(text)
+        personal_info = await self._extract_personal_info_with_regex(text)
+        
+        total_experience = self._calculate_total_experience(experience)
+        education_level = self._determine_education_level(education)
+        languages = await self._extract_languages_with_regex(text)
+        certifications = await self._extract_certifications_with_regex(text)
+        
+        return {
+            "skills": skills,
+            "education": education,
+            "experience": experience,
+            "personal_info": personal_info,
+            "total_experience_years": total_experience,
+            "education_level": education_level,
+            "languages": languages,
+            "certifications": certifications
+        }
+    
+    async def _extract_with_regex(self, text: str) -> Dict[str, Any]:
+        """Extract using only regex patterns"""
+        skills = await self._extract_skills_with_dict(text)
+        education = await self._extract_education_with_regex(text)
+        experience = await self._extract_experience_with_regex(text)
+        personal_info = await self._extract_personal_info_with_regex(text)
+        
+        total_experience = self._calculate_total_experience(experience)
+        education_level = self._determine_education_level(education)
+        languages = await self._extract_languages_with_regex(text)
+        certifications = await self._extract_certifications_with_regex(text)
+        
+        return {
+            "skills": skills,
+            "education": education,
+            "experience": experience,
+            "personal_info": personal_info,
+            "total_experience_years": total_experience,
+            "education_level": education_level,
+            "languages": languages,
+            "certifications": certifications
+        }
+    
+    async def _extract_skills_with_dict(self, text: str) -> List[Dict]:
+        """Extract skills using dictionary lookup"""
+        skills = []
+        text_lower = text.lower()
+        
+        for skill in self.TECHNICAL_SKILLS:
+            if skill in text_lower:
+                skills.append({
+                    "name": skill,
+                    "type": SkillType.TECHNICAL.value,
+                    "confidence": 0.9,
+                    "context": self._find_context(text, skill)
+                })
+        
+        for skill in self.SOFT_SKILLS:
+            if skill in text_lower:
+                skills.append({
+                    "name": skill,
+                    "type": SkillType.SOFT.value,
+                    "confidence": 0.7,
+                    "context": self._find_context(text, skill)
+                })
+        
+        # Remove duplicates
+        seen = set()
+        unique_skills = []
+        for skill in skills:
+            if skill["name"] not in seen:
+                seen.add(skill["name"])
+                unique_skills.append(skill)
+        
+        return unique_skills[:50]
+    
+    async def _extract_education_with_regex(self, text: str) -> List[Dict]:
+        """Extract education using regex"""
+        education = []
+        text_lower = text.lower()
+        
+        degree_patterns = [
+            (r'bachelor|b\.?s\.?|b\.?a\.?', 'bachelors'),
+            (r'master|m\.?s\.?|m\.?a\.?|mba', 'masters'),
+            (r'ph\.?d\.?|doctorate', 'phd'),
+            (r'associate|a\.?s\.?|a\.?a\.?', 'associate')
+        ]
+        
+        for pattern, level in degree_patterns:
+            if re.search(pattern, text_lower):
+                # Try to find institution
+                institution = "Unknown"
+                uni_pattern = r'(?:at|from|of)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*(?:\s+University|\s+College|\s+Institute))'
+                uni_match = re.search(uni_pattern, text, re.IGNORECASE)
+                if uni_match:
+                    institution = uni_match.group(1)
+                
+                education.append({
+                    "degree": pattern.replace('|', '/'),
+                    "institution": institution,
+                    "field_of_study": None,
+                    "graduation_year": None,
+                    "level": level,
+                    "confidence": 0.7
+                })
+                break
+        
+        return education[:3]
+    
+    async def _extract_experience_with_regex(self, text: str) -> List[Dict]:
+        """Extract experience using regex"""
+        experiences = []
+        
+        # Find date ranges
+        date_pattern = r'(\d{4})\s*[-–]\s*(\d{4}|present|current)'
+        matches = re.findall(date_pattern, text, re.IGNORECASE)
+        
+        for match in matches:
+            try:
+                start_year = int(match[0])
+                end_text = match[1].lower()
+                
+                if end_text in ['present', 'current']:
+                    end_year = 2024
+                else:
+                    end_year = int(end_text)
+                
+                duration = end_year - start_year
+                if 0 < duration < 50:  # Sanity check
+                    # Try to extract job title
+                    title = "Professional Experience"
+                    title_pattern = r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:Engineer|Developer|Manager|Director|Analyst|Consultant))'
+                    title_match = re.search(title_pattern, text[max(0, text.find(str(start_year))-200):text.find(str(start_year))])
+                    if title_match:
+                        title = title_match.group(1)
+                    
+                    experiences.append({
+                        "title": title,
+                        "company": "Unknown Company",
+                        "start_date": str(start_year),
+                        "end_date": end_text if end_text in ['present', 'current'] else str(end_year),
+                        "duration_years": duration,
+                        "description": "",
+                        "responsibilities": [],
+                        "achievements": [],
+                        "confidence": 0.6
+                    })
+            except:
+                pass
+        
+        return experiences[:10]
+    
+    async def _extract_personal_info_with_regex(self, text: str) -> Dict:
+        """Extract personal info using regex"""
+        info = {
+            "name": None,
+            "email": None,
+            "phone": None,
+            "location": None,
+            "linkedin": None,
+            "github": None
+        }
+        
+        # Extract name (first non-empty line that looks like a name)
+        lines = text.split('\n')
+        for line in lines[:15]:
+            line = line.strip()
+            if line and len(line) < 50 and len(line.split()) in [2, 3, 4]:
+                # Check if it looks like a name (capitalized words)
+                words = line.split()
+                if all(w[0].isupper() for w in words if w):
+                    info["name"] = line
+                    break
+        
+        # Extract email
+        email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        email_match = re.search(email_pattern, text)
+        if email_match:
+            info["email"] = email_match.group(0)
+        
+        # Extract phone
+        phone_pattern = r'\b(\+?1?[-.\s]?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4})\b'
+        phone_match = re.search(phone_pattern, text)
+        if phone_match:
+            info["phone"] = phone_match.group(0)
+        
+        # Extract location (city, state)
+        location_pattern = r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*),\s*([A-Z]{2})\b'
+        location_match = re.search(location_pattern, text)
+        if location_match:
+            info["location"] = f"{location_match.group(1)}, {location_match.group(2)}"
+        
+        return info
+    
+    async def _extract_languages_with_regex(self, text: str) -> List[str]:
+        """Extract languages"""
+        languages = []
+        lang_list = ['english', 'spanish', 'french', 'german', 'chinese', 'japanese', 'korean', 'russian', 'arabic', 'hindi']
+        text_lower = text.lower()
+        
+        for lang in lang_list:
+            if lang in text_lower:
+                languages.append(lang)
+        
+        return languages[:5]
+    
+    async def _extract_certifications_with_regex(self, text: str) -> List[str]:
+        """Extract certifications"""
+        certifications = []
+        cert_patterns = [
+            r'aws certified',
+            r'azure certified',
+            r'gcp certified',
+            r'scrum master',
+            r'pmp',
+            r'certified kubernetes',
+            r'tensorflow certified',
+            r'cissp',
+            r'comptia'
+        ]
+        
+        text_lower = text.lower()
+        for pattern in cert_patterns:
+            if re.search(pattern, text_lower):
+                certifications.append(pattern.title())
+        
+        return list(set(certifications))[:10]
+    
+    def _calculate_total_experience(self, experiences: List[Dict]) -> float:
+        """Calculate total years of experience"""
+        total = 0
+        for exp in experiences:
+            duration = exp.get('duration_years', 0)
+            if duration:
+                total += duration
+        return round(total, 1)
+    
+    def _determine_education_level(self, education: List[Dict]) -> str:
+        """Determine highest education level"""
+        level_priority = {
+            'phd': 4,
+            'masters': 3,
+            'bachelors': 2,
+            'associate': 1,
+            'unknown': 0
+        }
+        
+        highest = 'unknown'
+        highest_score = 0
+        
+        for edu in education:
+            level = edu.get('level', 'unknown')
+            score = level_priority.get(level, 0)
+            if score > highest_score:
+                highest_score = score
+                highest = level
+        
+        return highest if highest != 'unknown' else 'bachelors'
+    
+    def _find_context(self, text: str, keyword: str, window: int = 100) -> Optional[str]:
+        """Find context around a keyword"""
+        text_lower = text.lower()
+        index = text_lower.find(keyword.lower())
+        if index != -1:
+            start = max(0, index - window)
+            end = min(len(text), index + len(keyword) + window)
+            context = text[start:end]
+            # Clean up context
+            context = context.replace('\n', ' ').strip()
+            return context
+        return None
+    
+    def _get_empty_result(self) -> Dict[str, Any]:
+        """Return empty extraction result"""
+        return {
+            "skills": [],
+            "education": [],
+            "experience": [],
+            "personal_info": {
+                "name": None,
+                "email": None,
+                "phone": None,
+                "location": None,
+                "linkedin": None,
+                "github": None
+            },
+            "total_experience_years": 0,
+            "education_level": "unknown",
+            "languages": [],
+            "certifications": []
+        }
+    
+    async def extract_job_requirements(self, job_description: str) -> Dict[str, Any]:
+        """Extract requirements from job description"""
+        requirements = {
+            'skills': [],
+            'min_experience': 0,
+            'education': None
+        }
+        
+        text_lower = job_description.lower()
+        
+        # Extract skills
+        for skill in self.TECHNICAL_SKILLS:
+            if skill in text_lower:
+                requirements['skills'].append(skill)
+                if len(requirements['skills']) >= 20:
+                    break
+        
+        # Extract experience
+        exp_pattern = r'(\d+)\+?\s*years?'
+        exp_match = re.search(exp_pattern, job_description)
+        if exp_match:
+            requirements['min_experience'] = int(exp_match.group(1))
+        
+        # Extract education
+        if 'bachelor' in text_lower:
+            requirements['education'] = 'bachelors'
+        elif 'master' in text_lower:
+            requirements['education'] = 'masters'
+        elif 'phd' in text_lower:
+            requirements['education'] = 'phd'
+        
+        return requirements

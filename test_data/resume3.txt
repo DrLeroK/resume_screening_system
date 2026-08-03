@@ -1,0 +1,29 @@
+Bob Johnson
+Email: bob.johnson@email.com | Phone: (555) 456-7890 | Location: Remote
+
+SUMMARY
+Recent CS graduate with internship experience in Python development.
+
+TECHNICAL SKILLS
+• Languages: Python, Java, HTML/CSS
+• Frameworks: Flask, Bootstrap
+• Databases: SQLite, MySQL
+
+WORK EXPERIENCE
+
+Intern Developer | TechStart | New York, NY
+Jun 2023 - Aug 2023
+- Assisted in building internal tools with Python
+- Fixed bugs and tested features
+- Wrote documentation
+
+EDUCATION
+Bachelor of Science in Computer Science
+City University of New York, 2023
+
+PROJECTS
+• Personal Portfolio Website (Flask, Bootstrap)
+• Weather App (Python, OpenWeather API)
+
+LANGUAGES
+English (Native), Chinese (Basic)

@@ -1,0 +1,15 @@
+John Smith
+john.smith@email.com
+(555) 123-4567
+
+SUMMARY
+Python Developer with 5 years experience
+
+SKILLS
+Python, FastAPI, PostgreSQL, Docker
+
+EXPERIENCE
+Software Engineer | Tech Corp | 2019 - 2024
+
+EDUCATION
+Bachelor of Science in Computer Science, 2019

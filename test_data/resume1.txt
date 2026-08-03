@@ -1,0 +1,42 @@
+John Doe
+Email: john.doe@email.com | Phone: (555) 123-4567 | Location: San Francisco, CA
+
+SUMMARY
+Senior Software Engineer with 8 years of experience in full-stack development. 
+Expert in Python, FastAPI, and cloud technologies. Led teams of 5+ developers.
+
+TECHNICAL SKILLS
+• Languages: Python, JavaScript, TypeScript, Go
+• Frameworks: FastAPI, Django, React, Node.js
+• Databases: PostgreSQL, MongoDB, Redis
+• Cloud & DevOps: AWS (EC2, S3, Lambda), Docker, Kubernetes, Terraform
+• Tools: Git, Jenkins, Prometheus, Grafana
+
+WORK EXPERIENCE
+
+Senior Software Engineer | TechCorp Inc. | San Francisco, CA
+Jan 2020 - Present
+- Architected and built microservices using FastAPI, handling 100k+ requests/day
+- Reduced API response time by 40% through query optimization and caching
+- Led migration from monolith to Kubernetes, improving scalability
+- Mentored 3 junior developers and conducted code reviews
+
+Software Engineer | DataSystems | Boston, MA
+Jun 2017 - Dec 2019
+- Developed REST APIs with Django and PostgreSQL
+- Implemented CI/CD pipeline using Jenkins and Docker
+- Collaborated with data science team on ML model deployment
+
+EDUCATION
+Master of Science in Computer Science
+Stanford University, 2017
+
+Bachelor of Science in Computer Engineering
+University of Michigan, 2015
+
+CERTIFICATIONS
+• AWS Certified Solutions Architect
+• Kubernetes Certified Administrator
+
+LANGUAGES
+English (Native), Spanish (Intermediate)
